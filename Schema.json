@@ -36,16 +36,13 @@
             "required": [
               "Value",
               "StrengthNum",
-              "StrengthText",
-              "LastReset"
+              "StrengthText"
             ]
           }
         },
         "required": [
           "Description",
           "UserID",
-          "LoginUrl",
-          "AccountNum",
           "Password"
         ]
       }
