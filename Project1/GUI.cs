@@ -36,11 +36,34 @@ namespace Project1
             {
                 System.Environment.Exit(0);
             }
-            else if(System.Int32.Parse(inp) < len && System.Int32.Parse(inp)
+            else if(System.Int32.Parse(inp) < len && System.Int32.Parse(inp) > 0)
             {
                 List<Account> accounts = new List<Account>();
                 accounts[System.Int32.Parse(inp)].PrintData();
-              
+
+                Console.Write(header);
+                Console.WriteLine("Press P to change this Password.");
+                Console.WriteLine("Press D to delete this entry.");
+                Console.WriteLine("Press M to return to the main menu.");
+                string inp2 = Console.ReadLine();
+                if (inp2 == "P" || inp2 == "p")
+                {
+
+                }
+                else if (inp2 == "D" || inp2 == "d")
+                {
+
+                    len--;
+                }
+                else if (inp2 == "M" || inp2 == "m")
+                {
+
+                }
+                else
+                {
+                    Console.WriteLine("This is not a valid input");
+                }
+
             }
             else
             {

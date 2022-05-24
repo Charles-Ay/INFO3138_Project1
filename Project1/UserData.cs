@@ -14,6 +14,18 @@ namespace Project1
         public string LoginUrl { get; set; }
         public int AccountNum { get; set; }
         public Password Password { get; set; }
+
+        public void PrintData ()
+        {
+
+            Console.WriteLine("User ID:             "+UserID);
+            Console.WriteLine("Password:            " + Password);
+            Console.WriteLine("Password Strength:   " + Password.StrengthNum);
+            Console.WriteLine("Password Last Reset: " + Password.LastReset);
+            Console.WriteLine("Login URL:           " + LoginUrl);
+            Console.WriteLine("Account Number:      " + AccountNum);
+        }
+
     }
 
     public class Password

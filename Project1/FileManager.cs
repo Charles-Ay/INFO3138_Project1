@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Newtonsoft;
+using Newtonsoft.Json;
 
 namespace Project1
 {
@@ -11,39 +13,43 @@ namespace Project1
     {
         public const string fileName = "Accounts.json";
         public static string filePath { get; private set; }
-
-        FileManager()
+        public static FileManager fileManager;
+        //private static JsonEngine engine = new JsonEngine();
+        private FileManager()
         {
             filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+            if(!CheckFile())throw new FileNotFoundException(fileName);
         }
+        public static FileManager Instance()
+        {
+            if(fileManager == null)fileManager = new FileManager();
+            return fileManager;
+        }
+
         public bool CheckFile()
         {
-            if (File.Exists(fileName))
+            if (File.Exists(filePath))
             {
                 return true;
             }
             return false;
         }
+
+        public void ParseJson()
+        {
+            JsonEngine.JsonToAccount();
+        }
     }
 
-    private class JsonEngine
+    internal class JsonEngine
     {
-        private Account account;
-        private Password password;
-        internal static void JsonToAccount()
+        private static Account account;
+        private static Password password;
+        private static Root root;
+        public static void JsonToAccount()
         {
-            string JsonText = ReadJsonFile(FileManager.filePath);
-            string json = FileEngine.ReadFileFromGIT("Database", "Weapon.json");//json to convert
-            weapon = JsonConvert.DeserializeObject<MakeWeapon>(json);//convert json to lists
-
-            json = FileEngine.ReadFileFromGIT("Database", "Armour.json");
-            armour = JsonConvert.DeserializeObject<MakeArmour>(json);
-
-            json = FileEngine.ReadFileFromGIT("Database", "Enemy.json");
-            enemy = JsonConvert.DeserializeObject<MakeEnemy>(json);
-
-            json = FileEngine.ReadFileFromGIT("Database", "OtherItem.json");
-            item = JsonConvert.DeserializeObject<MakeItem>(json);
+            string jsonText = ReadJsonFile(FileManager.filePath);//json to convert
+            _ = JsonConvert.DeserializeObject<Root>(jsonText);
         }
 
         /// <summary>

@@ -10,8 +10,11 @@ namespace Project1
     {
         static void Main(string[] args)
         {
-            var GUI = new GUI();
-            GUI.test()
+            //var GUI = new GUI();
+            //GUI.test();
+
+            FileManager manager = FileManager.Instance();
+            manager.ParseJson();
         }
     }
 }
