@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FileManager;
 
 namespace Project1
 {
@@ -10,11 +11,14 @@ namespace Project1
     {
         static void Main(string[] args)
         {
-            //var GUI = new GUI();
-            //GUI.test();
-
-            FileManager manager = FileManager.Instance();
+            FileManager.FileManager manager = FileManager.FileManager.Instance();
             manager.ParseJson();
+
+            var GUI = new GUI();
+            GUI.start();
+
+            manager.WriteJson();
+
         }
     }
 }

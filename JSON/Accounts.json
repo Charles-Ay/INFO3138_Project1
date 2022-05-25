@@ -1,7 +1,7 @@
-{
-    "Account": {
+[
+    {
         "Description": "Cibc bank account",
-        "UserID": 123,
+        "UserID": "abc123",
         "LoginUrl": "https\\\\www.cibc.com\\login",
         "AccountNum": 12114121,
         "Password": {
@@ -10,6 +10,5 @@
             "StrengthText": "Very Weak",
             "LastReset": "2022-01-10:11:19:23pm"
         }
-
     }
-}
+]

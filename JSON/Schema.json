@@ -1,53 +1,50 @@
 {
-    "$schema": "http://json-schema.org/draft-04/schema#",
-    "type": "object",
-    "properties": {
-      "Account": {
-        "type": "object",
-        "properties": {
-          "Description": {
-            "type": "string"
-          },
-          "UserID": {
-            "type": "integer"
-          },
-          "LoginUrl": {
-            "type": "string"
-          },
-          "AccountNum": {
-            "type": "integer"
-          },
-          "Password": {
-            "type": "object",
-            "properties": {
-              "Value": {
-                "type": "string"
-              },
-              "StrengthNum": {
-                "type": "integer"
-              },
-              "StrengthText": {
-                "type": "string"
-              },
-              "LastReset": {
-                "type": "string"
-              }
-            },
-            "required": [
-              "Value",
-              "StrengthNum",
-              "StrengthText"
-            ]
-          }
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "array",
+  "items": [
+    {
+      "type": "object",
+      "properties": {
+        "Description": {
+          "type": "string"
         },
-        "required": [
-          "Description",
-          "UserID",
-          "Password"
-        ]
-      }
-    },
-    "required": [
-      "Account"
-    ]
-  }
+        "UserID": {
+          "type": "string"
+        },
+        "LoginUrl": {
+          "type": "string"
+        },
+        "AccountNum": {
+          "type": "integer"
+        },
+        "Password": {
+          "type": "object",
+          "properties": {
+            "Value": {
+              "type": "string"
+            },
+            "StrengthNum": {
+              "type": "integer"
+            },
+            "StrengthText": {
+              "type": "string"
+            },
+            "LastReset": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "Value",
+            "StrengthNum",
+            "StrengthText"
+          ]
+        }
+      },
+      "required": [
+        "Description",
+        "UserID",
+        "Password"
+      ]
+    }
+  ]
+}
