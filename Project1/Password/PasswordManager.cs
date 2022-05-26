@@ -18,9 +18,16 @@ using Accounts;
 
 namespace PasswordManager
 {
+    /// <summary>
+    /// Class used to manage password
+    /// </summary>
     public class PasswordManager
     {
-
+        /// <summary>
+        /// Check the strenght of a password
+        /// </summary>
+        /// <param name="password">password to check</param>
+        /// <returns></returns>
         public Accounts.Password CheckStrength(string password)
         {
             try

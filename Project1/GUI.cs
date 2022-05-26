@@ -8,9 +8,17 @@ using Accounts;
 
 namespace Project1
 {
+    /// <summary>
+    /// Class used for user input
+    /// </summary>
     internal class GUI
     {
         private const string header = "+--------------------------------------------------------------+";
+        
+        /// <summary>
+        /// Method adds character at chose screen position
+        /// </summary>
+        /// <param name="rightPos"></param>
         private void endChar(int rightPos)
         {
             int curLeft = Console.CursorLeft;
@@ -19,6 +27,10 @@ namespace Project1
             Console.SetCursorPosition(curLeft, Console.CursorTop + 1);
         }
 
+        /// <summary>
+        /// Get The Json Files needed to be used
+        /// </summary>
+        /// <returns>A instanciated file manager</returns>
         private FileManager.FileManager GetFiles()
         {
             //Comment for schema validation
@@ -54,6 +66,9 @@ namespace Project1
 
         }
 
+        /// <summary>
+        /// Start the GUI
+        /// </summary>
         public void start()
         {
             FileManager.FileManager manager = GetFiles();
@@ -66,11 +81,15 @@ namespace Project1
             main();
         }
 
+        /// <summary>
+        /// Main GUI
+        /// </summary>
         private void main() {
             int leftPos = Console.CursorLeft;
             int rightPos = 0;
             int val = 0;
 
+            //main gui start to reset after method calls
         start:
 
             for (int i = 0; i < header.Length; i++)
@@ -97,6 +116,7 @@ namespace Project1
 
             Console.WriteLine(header);
 
+            //if the are no accounts force accounts
             while(Account.allAccounts.Count == 0)
             {
                 Console.WriteLine(header);
@@ -126,6 +146,7 @@ namespace Project1
                 }
             }
 
+            //print all accounts
             for (int i = 0; i < Account.allAccounts.Count; i++)
             {
                 Console.WriteLine($"|   {i + 1}. {Account.allAccounts[i].Description}");
@@ -148,6 +169,7 @@ namespace Project1
 
             Console.WriteLine();
 
+            //get use choice
             while (inp != "x" || inp != "X")
             {
                 if (inp == "x" || inp == "X") break;
@@ -188,10 +210,13 @@ namespace Project1
             
         }
 
-
-
+        /// <summary>
+        /// Add a new account entry
+        /// </summary>
+        /// <param name="rightPos"></param>
         private void AddEntry(int rightPos)
         {
+            //new password manager
             PasswordManager.PasswordManager passwordManager = new PasswordManager.PasswordManager();
 
             Console.Write("| User ID:           ");
@@ -219,7 +244,7 @@ namespace Project1
                 passwordText = Console.ReadLine();
                 endChar(rightPos);
             }
-
+            //check to see if password is strong enough
             Accounts.Password password = passwordManager.CheckStrength(passwordText);
 
             while (password.StrengthNum < 50)
@@ -271,12 +296,18 @@ namespace Project1
                 description = Console.ReadLine();
                 endChar(rightPos);
             }
-
+            //add the new account to the accounts list
             Account.allAccounts.Add(new Account(description, userId, LoginUrl, accountNum, password));
             Console.WriteLine(header);
             Console.WriteLine();
         }
 
+        /// <summary>
+        /// Edit a entry
+        /// </summary>
+        /// <param name="account">the account to edit</param>
+        /// <param name="rightPos">the value used for endchar function</param>
+        /// <param name="index">Index in the accounts list</param>
         private void editEntry(Account account, int rightPos, int index)
         {
             Console.WriteLine(header);
@@ -291,14 +322,17 @@ namespace Project1
             Console.WriteLine();
             Console.Write("Enter selection: ");
             string input = Console.ReadLine();
-            //Console.WriteLine();
-            //Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
 
+            //bool to tell us if account is removed
             bool removed = false;
-            //Console.WriteLine($"Input: {input}");
             while (true)
             {
+                //return to menu
                 if (input.Equals("M") || input.Equals("m")) break;
+
+                //change password
                 if(input == "P" || input == "p")
                 {
                     Console.WriteLine(header);
@@ -316,6 +350,8 @@ namespace Project1
                         passwordText = Console.ReadLine();
                         endChar(rightPos);
                     }
+
+                    //verify password strength
                     Accounts.Password password = passwordManager.CheckStrength(passwordText);
 
                     if(password.StrengthNum < 50)
@@ -333,14 +369,14 @@ namespace Project1
                         } while (password.StrengthNum < 50);
                     }
 
-
-
+                    //update the account password
                     account.Password = new Accounts.Password(password.Value, password.StrengthNum, password.StrengthText, DateTime.Now.ToString());
                     Console.WriteLine();
                     Console.WriteLine(header);
                     Console.WriteLine();
                     break;
                 }
+                //confirm delete password
                 else if (input == "D" || input == "d")
                 {
                     Console.Write("| Are You sure? (Y/N):");
@@ -366,7 +402,7 @@ namespace Project1
                     Console.WriteLine();
                 }
             }
-
+            //remove the password
             if (removed)
             {
                 Account.allAccounts.RemoveAt(index);
@@ -374,8 +410,6 @@ namespace Project1
                 endChar(rightPos);
             }
             else Account.allAccounts[index] = account;
-
-
         }
     }
 }

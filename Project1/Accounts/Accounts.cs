@@ -6,7 +6,10 @@ namespace Accounts
 {
     public class Account
     {
-        public static List<Account> allAccounts = new List<Account>();//list of all accounts
+        /// <summary>
+        /// List of all accounts
+        /// </summary>
+        public static List<Account> allAccounts = new List<Account>();
         public string Description { get; set; }
         public string UserID { get; set; }
         public string LoginUrl { get; set; }
@@ -21,6 +24,11 @@ namespace Accounts
             Password = new Password(password);
         }
 
+        /// <summary>
+        /// Print the account data
+        /// </summary>
+        /// <param name="endChar">Function to move place character</param>
+        /// <param name="rightPos">Right position</param>
         public void PrintData (Action<int> endChar, int rightPos)
         {
 
