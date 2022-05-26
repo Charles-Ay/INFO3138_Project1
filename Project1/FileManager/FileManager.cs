@@ -21,19 +21,31 @@ namespace FileManager
 
 
 
-        public static FileManager fileManager;
+        private static FileManager fileManager;
         //private static JsonEngine engine = new JsonEngine();
-        private FileManager()
+        private FileManager(string filePath, string schemaPath)
         {
             //check if file exists
-            filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
-            if(!CheckFile())throw new FileNotFoundException(fileName);
-            schemaPath = Path.Combine(Directory.GetCurrentDirectory(), schemaName);
-            if (!CheckFile()) throw new FileNotFoundException(schemaName);
+            FileManager.filePath = Path.Combine(filePath, fileName);
+            if (!CheckFile())
+            {
+                fileManager = null;
+                throw new FileNotFoundException(fileName);
+            }
+
+            //Uncomment for schema validation
+            //FileManager.schemaPath = Path.Combine(schemaPath, schemaName);
+            //if (!CheckFile()) throw new FileNotFoundException(schemaName);
         }
-        public static FileManager Instance()
+
+        private FileManager()
         {
-            if(fileManager == null)fileManager = new FileManager();
+
+        }
+
+        public static FileManager Instance(string filePath, string schemaPath)
+        {
+            if (fileManager == null) fileManager = new FileManager(filePath, schemaPath);
             return fileManager;
         }
 
@@ -44,6 +56,15 @@ namespace FileManager
                 return true;
             }
             return false;
+        }
+
+        public static FileManager CreateFileAndInstance(string path)
+        {
+            filePath = Path.Combine(path, fileName);
+            File.Create(filePath);
+            if (!File.Exists(filePath)) throw new FileNotFoundException(fileName);
+            fileManager = new FileManager();
+            return (fileManager);
         }
 
         public void ParseJson()
@@ -62,7 +83,8 @@ namespace FileManager
         internal static void JsonToAccount()
         {
             string jsonText = ReadJsonFile(FileManager.filePath);//json to convert
-            Account.allAccounts = JsonConvert.DeserializeObject<List<Account>>(jsonText);
+            if (jsonText == String.Empty) Account.allAccounts = new List<Account>();
+            else Account.allAccounts = JsonConvert.DeserializeObject<List<Account>>(jsonText);
         }
 
         internal static string AccountToJsonString()
@@ -85,16 +107,28 @@ namespace FileManager
 
         internal static void WriteJson()
         {
-            JSchema schema = JSchema.Parse(ReadJsonFile(FileManager.schemaPath));
+            //Comment for schema validation
+            //JSchema schema = JSchema.Parse(ReadJsonFile(FileManager.schemaPath));
             string accountsText = AccountToJsonString();
             JArray accounts = JArray.Parse(accountsText);
-            if (accounts.IsValid(schema))
+
+
+            //Uncomment for schema validation
+            //if (accounts.IsValid(schema))
+            //{
+            //    using (StreamWriter sw = File.CreateText(FileManager.filePath))
+            //    {
+            //        sw.Write(accountsText);
+            //    }
+            //}
+
+            //Comment for schema validation
+            using (StreamWriter sw = File.CreateText(FileManager.filePath))
             {
-                using (StreamWriter sw = File.CreateText(FileManager.filePath))
-                {
-                    sw.Write(accountsText);
-                }
+                sw.Write(accountsText);
             }
+
+
             Console.WriteLine($"{Account.allAccounts.Count} account(s) written to: {FileManager.filePath}");
 
         }

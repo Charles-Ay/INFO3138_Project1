@@ -19,8 +19,47 @@ namespace Project1
             Console.SetCursorPosition(curLeft, Console.CursorTop + 1);
         }
 
+        private FileManager.FileManager GetFiles()
+        {
+            //Comment for schema validation
+            //Console.Write("Enter Schema Path: ");
+            //string schemaPath = Console.ReadLine();
+            Console.Write("Enter Accounts File Path: ");
+            string filePath = Console.ReadLine();
+
+            try
+            {
+
+                FileManager.FileManager manager = FileManager.FileManager.Instance(filePath, "");
+                return manager;
+            }
+            catch(Exception ex)
+            {
+                try
+                {
+                    Console.WriteLine($"Path Is Missing File: {ex.Message}. File will be created");
+
+                    FileManager.FileManager manager = FileManager.FileManager.CreateFileAndInstance(filePath);
+                    manager.ParseJson();
+                    return manager;
+                }
+                catch(Exception ex2)
+                {
+                    Console.WriteLine($"Error Creating File: {ex2.Message}. Program will terminate");
+                    System.Environment.Exit(1);
+                }
+
+            }
+            return null;
+
+        }
+
         public void start()
         {
+            FileManager.FileManager manager = GetFiles();
+            manager.ParseJson();
+
+            Console.WriteLine();
             Console.WriteLine("PASSWORD MANAGEMENT SYSTEM");
             Console.WriteLine();
             Console.WriteLine(header);
@@ -28,7 +67,6 @@ namespace Project1
         }
 
         private void main() {
-            int len = 0;
             int leftPos = Console.CursorLeft;
             int rightPos = 0;
             int val = 0;
@@ -59,6 +97,35 @@ namespace Project1
 
             Console.WriteLine(header);
 
+            while(Account.allAccounts.Count == 0)
+            {
+                Console.WriteLine(header);
+                Console.WriteLine("|      There are currently 0 account entries");
+                endChar(rightPos);
+                Console.WriteLine("|      Enter A to add a new entry.");
+                endChar(rightPos);
+                Console.WriteLine(header);
+                Console.WriteLine();
+
+
+                Console.Write("Enter a command: ");
+                string inp2 = Console.ReadLine();
+
+                Console.WriteLine();
+
+                if (inp2 == "A" || inp2 == "a")
+                {
+                    Console.WriteLine(header);
+                    Console.WriteLine("|   Add a new entry");
+                    endChar(rightPos);
+                    Console.WriteLine(header);
+                    AddEntry(rightPos);
+                    Console.WriteLine(header);
+                    goto start;
+
+                }
+            }
+
             for (int i = 0; i < Account.allAccounts.Count; i++)
             {
                 Console.WriteLine($"|   {i + 1}. {Account.allAccounts[i].Description}");
@@ -81,7 +148,7 @@ namespace Project1
 
             Console.WriteLine();
 
-            do
+            while (inp != "x" || inp != "X")
             {
                 if (inp == "x" || inp == "X") break;
                 if (inp == "A" || inp == "a")
@@ -117,7 +184,7 @@ namespace Project1
 
                     Console.WriteLine();
                 }
-            } while (inp != "x" || inp != "X");
+            } 
             
         }
 
@@ -162,11 +229,11 @@ namespace Project1
                 endChar(rightPos);
 
                 password = passwordManager.CheckStrength(passwordText);
-                Console.Write($"| Password Strength: {password.StrengthText} ({password.StrengthNum})% ");
-                endChar(rightPos);
             }
+            Console.Write($"| Password Strength: {password.StrengthText} ({password.StrengthNum})% ");
 
-            Console.WriteLine("|");
+
+            Console.WriteLine();
 
             Console.Write("| Login Url:         ");
             string LoginUrl = Console.ReadLine();
@@ -180,7 +247,7 @@ namespace Project1
                 if (tmp != string.Empty)
                     accountNum = System.Int32.Parse(tmp);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Console.WriteLine("|");
                 endChar(rightPos);
@@ -206,6 +273,8 @@ namespace Project1
             }
 
             Account.allAccounts.Add(new Account(description, userId, LoginUrl, accountNum, password));
+            Console.WriteLine(header);
+            Console.WriteLine();
         }
 
         private void editEntry(Account account, int rightPos, int index)
@@ -221,15 +290,16 @@ namespace Project1
 
             Console.WriteLine();
             Console.Write("Enter selection: ");
-            ConsoleKey k = Console.ReadKey().Key;
-            Console.WriteLine();
-            Console.WriteLine();
+            string input = Console.ReadLine();
+            //Console.WriteLine();
+            //Console.WriteLine();
 
             bool removed = false;
-
-            while (k != ConsoleKey.M)
+            //Console.WriteLine($"Input: {input}");
+            while (true)
             {
-                if(k == ConsoleKey.P)
+                if (input.Equals("M") || input.Equals("m")) break;
+                if(input == "P" || input == "p")
                 {
                     Console.WriteLine(header);
                     
@@ -271,23 +341,40 @@ namespace Project1
                     Console.WriteLine();
                     break;
                 }
-                else if (k == ConsoleKey.D)
+                else if (input == "D" || input == "d")
                 {
-                    removed = true;
+                    Console.Write("| Are You sure? (Y/N):");
+                    input = Console.ReadLine();
+                    endChar(rightPos);
+                    if (input == "Y"|| input == "y")
+                    {
+                        removed = true;
+                    }
+                    else
+                    {
+                        Console.Write("| Account not removed");
+                        endChar(rightPos);
+                    }
                     break;
                 }
                 else
                 {
                     Console.WriteLine();
                     Console.Write("Invalid input. Enter selection: ");
-                    k = Console.ReadKey().Key;
+                    input = Console.ReadLine();
                     Console.WriteLine();
                     Console.WriteLine();
                 }
             }
 
-            if (removed) Account.allAccounts.RemoveAt(index);
+            if (removed)
+            {
+                Account.allAccounts.RemoveAt(index);
+                Console.WriteLine("| Account removed");
+                endChar(rightPos);
+            }
             else Account.allAccounts[index] = account;
+
 
         }
     }

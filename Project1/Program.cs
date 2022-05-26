@@ -11,12 +11,10 @@ namespace Project1
     {
         static void Main(string[] args)
         {
-            FileManager.FileManager manager = FileManager.FileManager.Instance();
-            manager.ParseJson();
-
             var GUI = new GUI();
             GUI.start();
 
+            FileManager.FileManager manager = FileManager.FileManager.Instance("", "");
             manager.WriteJson();
 
         }
